@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
-	"name": "Chrome插件demo",
+	"name": "e+阅读助手",
 	"version": "1.0",
-	"description": "最简单的Chrome插件demo，需要快速做一个简单的插件时可以基于这个仓库开发",
-	"author": "sxei",
+	"description": "最方便的e+阅读助手",
+	"author": "tony",
 	"icons":
 	{
 		"48": "icon.png",
@@ -14,15 +14,26 @@
 		"default_icon": "icon.png",
 		"default_popup": "popup.html"
 	},
+	// 会一直常驻的后台JS或后台页面
+	"background":
+	{
+		// 2种指定方式，如果指定JS，那么会自动生成一个背景页
+		// "scripts": ["js/background.js"]
+		"page": "reading.html"
+	},
 	"content_scripts": 
 	[
 		{
-			"matches": ["https://www.baidu.com/*"],
-			"js": ["content-script.js"]
+			"matches": ["<all_urls>"],
+			"js":["js/jquery-1.7.1.min.js","js/content-script.js"]
+		},
+		{
+			"matches": ["https://ejia.tbea.com/*"],
+			"js": ["js/content-script.js"]
 		}
 	],
 	"web_accessible_resources": 
 	[
-		"inject.js"
+		"js/ejia.js"
 	]
 }
