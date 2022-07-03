@@ -1,7 +1,7 @@
 ﻿(function() {
 	console.log('这是 simple-chrome-plugin-demo 的content-script！');
 })();
-var reading = 1
+var reading = 0
 var read_object = {
 	count: -1,
 	index: 0,
@@ -13,11 +13,11 @@ Object.defineProperty(read_object,'count',{
     },
     set:function(newValue){
         count=newValue;
-        console.log('set :',newValue);
+        // console.log('set :',newValue);
         //需要触发的渲染函数可以写在这...
 		if(read_object.read_list != [] && count > 0){
 			var index = read_object.index
-			console.log("reading start")
+			// console.log("reading start")
 			var click_item = read_object.read_list[index]
 			watch_iframe_dialog()
 			click_item.click()
@@ -40,7 +40,7 @@ Object.defineProperty(read_object,'count',{
 					// 开讲了
 					open_xwzx("XT-XT-1b1e03a9-8222-4b7f-a7eb-a5d91e2d012d-dd566281-9032-11e6-a62c-005056987210")
 				}
-				reading += 1;
+				
 			},2000)
 		}
     }
@@ -75,19 +75,20 @@ function add_iframes_event(){
 			var iframe_xiaoxi = $('iframe[src="/im/xiaoxi/"]')
 			if(iframe_xiaoxi.length > 0){
 				$('iframe[src="/im/xiaoxi/"]').ready(()=>{
-					console.log("iframe_xiaoxi load")
+					// console.log("iframe_xiaoxi load")
 					read_object.count = 0;
 					// 新闻咨询
 					// open_xwzx('XT-XT-2bb8a866-d2a3-47da-bbad-8c63db21e9b6-dd566281-9032-11e6-a62c-005056987210')
 				})
 			}
-			console.log($('iframe[src="/im/xiaoxi/"]'))
+			// console.log($('iframe[src="/im/xiaoxi/"]'))
 		},2000)
 		iframes.unbind("DOMNodeInserted")
 	})
 }
 
 function open_xwzx(id){
+	
 	var doc_xiaoxi = $('iframe[src="/im/xiaoxi/"]')[0].contentDocument
 	var xwzx = $('iframe[src="/im/xiaoxi/"]').contents().find('li#'+id)
     console.log(xwzx)
@@ -111,7 +112,8 @@ function open_xwzx(id){
 				read_last_xw($(".im-chat-main-wrapper",doc_xiaoxi))
 				xwzx.click()
 			}
-		}   
+		}  
+		reading += 1; 
     }
 }
 
@@ -124,10 +126,10 @@ function read_last_xw(xw_container){
 			var title = $("#im-chat-name",doc).text()
 			console.log(title)
 			if(title == '新闻资讯' || title == '新变厂新闻资讯' || title == '开讲了' ){
-				console.log("read xwzx")
+				// console.log("read xwzx")
 				var last_xw = $('div.chat-item:last',doc)
 				var xw_list = last_xw.find("a")
-				console.log(xw_list)
+				// console.log(xw_list)
 				if(xw_list.length > 0 && reading <= 3){
 					read_object.read_list = xw_list
 					read_object.count = xw_list.length
@@ -149,13 +151,13 @@ function read_one_xw(xw_reading){
 function watch_iframe_dialog(){
 	var body = $('body')
 	body.bind("DOMNodeInserted",()=>{
-		console.log("dialog insert")
+		// console.log("dialog insert")
 		setTimeout(()=>{
 			// 获取加载的新闻
 			var iframe_dialog = $('#iframe-yl_iframe_dialog_1')
 			if(iframe_dialog.length > 0){
 				iframe_dialog.ready(()=>{
-					console.log("iframe_dialog ready")
+					// console.log("iframe_dialog ready")
 					var doc_xw = $('iframe#iframe-yl_iframe_dialog_1').contents()[0]
 					setTimeout(() => {
 						var title = $('.article-container h3',doc_xw).text()
@@ -177,7 +179,7 @@ function watch_iframe_dialog(){
 			}
 		},1000)
 		body.unbind()
-		console.log("dialog close")
+		// console.log("dialog close")
 	})
 
 }
